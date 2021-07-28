@@ -20,7 +20,7 @@ def create_products(id):
     new_products = Products(id=id)
     db.session.add(new_products)
     db.session.commit()
-    return jsonify(new_products.as_dict())
+    return jsonify(new_products)
 
 # Update products
 def update_products(id):
@@ -28,7 +28,7 @@ def update_products(id):
     if products:
         products.id = id or products.id
         db.session.commit()
-        return jsonify(products.as_dict())
+        return jsonify(products)
     else:
         raise Exception('No Products at id {}'.format(id))
 

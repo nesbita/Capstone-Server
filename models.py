@@ -27,7 +27,7 @@ class Child(Base):
     __tablename__ = 'right'
     id = Column(Integer, primary_key=True)
 '''
-association_table = Table('association', Base.metadata,
+association_table = Table('association', db.Model.metadata,
     Column('users_id', ForeignKey('users.id'), primary_key=True),
     Column('products_id', ForeignKey('products.id'), primary_key=True)
 )
@@ -37,7 +37,7 @@ class User(db.Model):
     email = db.Column(db.String, unique=True, nullable=False)
     name = db.Column(db.String, nullable=False)
     products = relationship('Products',
-                    secondary=association_table, back_populates='user')
+                    secondary=association_table, back_populates='users')
 
 
     # products = db.relationship('Products', back_populates='user', lazy=True)
@@ -62,7 +62,7 @@ class Products(db.Model):
     price = db.Column(db.Integer, nullable=False)
     description = db.Column(db.String, nullable=False)
     img = db.Column(db.String, nullable=False)
-    user = relationship('User',
+    users = relationship('User',
                     secondary=association_table, back_populates='products')
     
     
@@ -73,5 +73,5 @@ class Products(db.Model):
     def __repr__(self):
         return f'Products("id={self.id}", "name={self.name}", "price={self.price}", "description={self.description}", "img={self.img}")'
 
-    # def as_dict(self):
-    #     return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
